@@ -10,7 +10,7 @@ function validateForm() {
       return false;
     }
 
-    // Additional validation logic can be added here if needed
+    
 
     return true;
   }
