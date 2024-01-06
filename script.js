@@ -12,6 +12,20 @@ function validateForm() {
     return true;
   }
 
+  function validateEmail(email){
+    // Regular expressiom for simple email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  }
+
+  const email = "mytodolist@email.com";
+  if (validateEmail(email)){
+    console.log("Email is valid");
+  }
+  else {
+    console.log("Email is invalid");
+  }
+
   // for todolist
   const inputBox = document.getElementById("input-box");
   const listContainer = document.getElementById("list-container");
