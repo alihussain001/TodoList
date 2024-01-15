@@ -20,6 +20,8 @@ function submitLogin(e) {
   }
 }
 
+var todoList = []
+
 function submitTodo(e) {
   e.preventDefault()
   const todoForm = document.getElementById('todoForm')
@@ -28,77 +30,59 @@ function submitTodo(e) {
 
   if (entries.task_name === '' || entries.description === '') {
     alert('Please enter task name and description')
-
     return
   }
 
-  console.log(entries)
+  let objectDate = new Date()
+  let day = objectDate.getDate()
+  let month = objectDate.getMonth()
+  let year = objectDate.getFullYear()
+  let format = month + '/' + day + '/' + year
+
+  todoList.push({
+    task_name: entries.task_name,
+    description: entries.description,
+    date: format,
+  })
+
+  renderTodoList()
 }
 
-// function validateForm() {
-//   var email = document.getElementById('email').value.trim()
-//   var password = document.getElementById('password').value.trim()
+function renderTodoList() {
+  const element = document.querySelectorAll('#taskList')[0]
 
-//   if (email === '' || password === '') {
-//     alert('Please enter both email and password.')
-//     return false
-//   }
+  element.innerHTML = ''
 
-//   return true
-// }
+  todoList.map(function (item, index) {
+    const li = document.createElement('li')
 
-// function validateEmail(email) {
-//   // Regular expressiom for simple email validation
-//   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-//   return emailRegex.test(email)
-// }
+    const html = `
+    <li class="flex justify-between gap-x-6 py-5">
+      <div class="flex min-w-0 gap-x-4">
+          <img class="h-12 w-12 flex-none rounded-full bg-gray-50"
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              alt="">
+          <div class="min-w-0 flex-auto">
+              <p class="text-sm font-semibold leading-6 text-gray-900">${item.task_name}</p>
+              <p class="mt-1 truncate text-xs leading-5 text-gray-500">
+              ${item.description}
+              </p>
+          </div>
+      </div>
+      <div class="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+          <p class="text-sm leading-6 text-gray-900">${item.date}</p>
+          <button onclick="deleteTodo('${index}')">Delete</button>
+      </div>
+    </li>
+  `
 
-// const email = 'mytodolist@email.com'
-// if (validateEmail(email)) {
-//   console.log('Email is valid')
-// } else {
-//   console.log('Email is invalid')
-// }
+    li.innerHTML = html
 
-// // for todolist
-// const inputBox = document.getElementById('input-box')
-// const listContainer = document.getElementById('list-container')
+    element.appendChild(li)
+  })
+}
 
-// function addTask() {
-//   if (inputBox.value === '') {
-//     alert('You must write something')
-//   } else {
-//     let li = document.createElement('li')
-//     li.innerHTML = inputBox.value
-//     listContainer.appendChild(li)
-
-//     let span = document.createElement('span')
-//     span.innerHTML = '\u00d7'
-//     li.appendChild(span)
-//   }
-//   inputBox.value = ''
-//   saveData()
-// }
-
-// listContainer.addEventListener(
-//   'click',
-//   function (e) {
-//     if (e.target.tagName === 'LI') {
-//       e.target.classList.toggle('checked')
-//       saveData()
-//     } else if (e.target.tagName === 'SPAN') {
-//       e.target.parentElement.remove()
-//       saveData()
-//     }
-//   },
-//   false,
-// )
-
-// function saveData() {
-//   localStorage.setItem('data', listContainer.innerHTML)
-// }
-
-// function showTask() {
-//   listContainer.innerHTML = localStorage.getItem('data')
-// }
-// showTask()
+function deleteTodo(index) {
+  todoList.splice(index, 1)
+  renderTodoList()
+}
